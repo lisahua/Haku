@@ -1,0 +1,2 @@
+Application,Java,classFile,/Users/jinruhua/Documents/Study/2014/nameExample/snapshots/Hello/bin/Hello.class
+Application,Java,sourceFile,/Users/jinruhua/Documents/Study/2014/nameExample/snapshots/Hello/src/Hello.java
