@@ -17,6 +17,13 @@ public class ApproximatePurityClassProcessor extends ASTVisitor {
 	public boolean visit(TypeDeclaration declaration) {
 		ApproximatePurityClassVisitor cVisitor = new ApproximatePurityClassVisitor();
 		declaration.accept(cVisitor);
+		HashSet<String> bugs = cVisitor.getBugs();
+		System.out.println(declaration.getName().toString());
+		if (bugs.size()==0) return true;
+		
+		for (String bug: bugs) {
+			System.out.println(" "+bug);
+		}
 		return true;
 	}
 

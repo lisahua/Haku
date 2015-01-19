@@ -10,6 +10,5 @@ public class TestApproximatePurityAnalysis {
 		ApproximatePurityProcessor processor = new ApproximatePurityProcessor();
 		processor
 				.getNameInDir("/Users/admin/Documents/snapshot/elasticsearch-1.0.0");
-
 	}
 }

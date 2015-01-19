@@ -1,10 +1,10 @@
 package seal.haku.lexicalAnalyser.similarity;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
@@ -20,44 +20,56 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 public class ApproximatePurityClassVisitor extends ASTVisitor {
 
 	HashSet<String> methodList = new HashSet<String>();
-	HashSet<String> fieldList = new HashSet<String>();
+	HashMap<String, String> fieldMap = new HashMap<String, String>();
 
 	public boolean visit(MethodDeclaration md) {
 		String methodName = processMethodName(md);
-		methodList.add(methodName);
-		//FIXME: heuristic constructor filter
+		// FIXME: heuristic constructor filter
 		if (methodName.charAt(0) - 'A' >= 0 && methodName.charAt(0) - 'Z' <= 0)
 			return true;
 		else {
-				md.accept(new ApproximatePurityMethodVisitor(methodName,
-						fieldList,md));
+			ApproximatePurityMethodVisitor methodVisitor = new ApproximatePurityMethodVisitor(
+					fieldMap);
+			md.accept(methodVisitor);
+			String bugs = methodVisitor.getBug();
+			if (bugs.trim().length() > 0)
+				methodList.add(methodName + "-->" + bugs);
 		}
 		return true;
 	}
 
-	public boolean visit(FieldDeclaration fd) {
+	public HashSet<String> getBugs() {
+		return methodList;
+	}
 
-		fieldList.add(processFieldName(fd));
+	public boolean visit(FieldDeclaration fd) {
+		String vString = "";
+		String tString = fd.getType().toString();
+		for (Object o : fd.fragments()) {
+			vString += o.toString().split("=")[0];
+		}
+		fieldMap.put(vString.trim(), tString.trim());
+
 		return true;
 	}
 
 	public boolean isSuspiciousMethod(MethodDeclaration decleration) {
-		for (String field : fieldList) {
-			if (decleration.toString().contains(field + " ")) {
-				return true;
-			}
-		}
+		// for (String field : fieldList) {
+		// if (decleration.toString().contains(field + " ")) {
+		// return true;
+		// }
+		// }
 		return false;
 	}
 
-	private String processFieldName(FieldDeclaration fd) {
-		@SuppressWarnings("rawtypes")
-		List fragment = fd.fragments();
-		String fString = "";
-		for (Object o : fragment)
-			fString += o.toString().split("=")[0] + "\t";
-		return fString;
-	}
+	// private String processFieldName(FieldDeclaration fd) {
+	// @SuppressWarnings("rawtypes")
+	// List fragment = fd.fragments();
+	// String fString = "";
+	// for (Object o : fragment)
+	// fString += o.toString().split("=")[0] ;
+	// return fString.trim();
+	// }
 
 	private String processMethodName(MethodDeclaration md) {
 		return md.getName().getIdentifier();
