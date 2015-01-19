@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import seal.haku.lexicalAnalyser.model.IdentifierNode;
+import seal.haku.lexicalAnalyser.model.NameToken;
 import seal.haku.lexicalAnalyser.model.TokenPairModel;
-import seal.haku.lexicalAnalyser.model.nameNode.IdentifierNode;
-import seal.haku.lexicalAnalyser.model.nameNode.NameToken;
 
 public class VariableInconsistentIdentifier implements
 		NamingRecommenderInterface {
@@ -16,7 +16,7 @@ public class VariableInconsistentIdentifier implements
 	private final int DIFF_VERB_ThRESHOLD = 3;
 	private final int NAME_BUG_THRESHOLD = 2;
 
-	@Override
+
 	public void identifyAbnormal(IdentifierNode cNode) {
 		extractNamingGroupInSingleClass(cNode);
 	}
@@ -25,16 +25,16 @@ public class VariableInconsistentIdentifier implements
 	private void extractNamingGroupInSingleClass(IdentifierNode cNode) {
 		HashMap<String, ArrayList<IdentifierNode>> verbMap = new HashMap<String, ArrayList<IdentifierNode>>();
 		// for all verbs
-//		for (IdentifierNode node : cNode.getChildren()) {
-//			String firstToken = node.getTokens().get(0).getToken();
-//			if (verbMap.containsKey(firstToken)) {
-//				verbMap.get(firstToken).add(node);
-//			} else {
-//				ArrayList<IdentifierNode> nodeList = new ArrayList<IdentifierNode>();
-//				nodeList.add(node);
-//				verbMap.put(firstToken, nodeList);
-//			}
-//		}
+		for (IdentifierNode node : cNode.getChildren()) {
+			String firstToken = node.getTokens().get(0).getToken();
+			if (verbMap.containsKey(firstToken)) {
+				verbMap.get(firstToken).add(node);
+			} else {
+				ArrayList<IdentifierNode> nodeList = new ArrayList<IdentifierNode>();
+				nodeList.add(node);
+				verbMap.put(firstToken, nodeList);
+			}
+		}
 		// for each verb,identify wildcard map
 		for (Map.Entry<String, ArrayList<IdentifierNode>> entry : verbMap
 				.entrySet()) {
@@ -53,32 +53,32 @@ public class VariableInconsistentIdentifier implements
 		HashMap<String, ArrayList<TokenPairModel>> wildcardMap = new HashMap<String, ArrayList<TokenPairModel>>();
 
 		for (int i = 0; i < nodes.size(); i++) {
-//			for (IdentifierNode vNode : nodes.get(i).getChildren()) {
-//				String vName = vNode.getName();
-//				if (vName.toLowerCase().contains(
-//						methodFeature.get(i).toLowerCase())) {
-//					String mFeature = methodFeature.get(i);
-//					String name = vNode.getName().replace(mFeature, WILDCARD);
-//					if (!name.contains(WILDCARD)) {
-//						if (mFeature.charAt(0) < 'a') {
-//							char newC = (char) (mFeature.charAt(0) + 'a' - 'A');
-//							mFeature = newC + mFeature.substring(1);
-//							name = vNode.getName().replace(mFeature, WILDCARD);
-//						}
-//					}
-//					if (wildcardMap.containsKey(name)) {
-//						wildcardMap.get(name)
-//								.add(new TokenPairModel(vName, methodFeature
-//										.get(i)));
-//					} else {
-//						ArrayList<TokenPairModel> nameList = new ArrayList<TokenPairModel>();
-//						nameList.add(new TokenPairModel(vName, methodFeature
-//								.get(i)));
-//						wildcardMap.put(name, nameList);
-//					}
-//
-//				}
-//			}
+			for (IdentifierNode vNode : nodes.get(i).getChildren()) {
+				String vName = vNode.getName();
+				if (vName.toLowerCase().contains(
+						methodFeature.get(i).toLowerCase())) {
+					String mFeature = methodFeature.get(i);
+					String name = vNode.getName().replace(mFeature, WILDCARD);
+					if (!name.contains(WILDCARD)) {
+						if (mFeature.charAt(0) < 'a') {
+							char newC = (char) (mFeature.charAt(0) + 'a' - 'A');
+							mFeature = newC + mFeature.substring(1);
+							name = vNode.getName().replace(mFeature, WILDCARD);
+						}
+					}
+					if (wildcardMap.containsKey(name)) {
+						wildcardMap.get(name)
+								.add(new TokenPairModel(vName, methodFeature
+										.get(i)));
+					} else {
+						ArrayList<TokenPairModel> nameList = new ArrayList<TokenPairModel>();
+						nameList.add(new TokenPairModel(vName, methodFeature
+								.get(i)));
+						wildcardMap.put(name, nameList);
+					}
+
+				}
+			}
 		}
 		return wildcardMap;
 	}
@@ -91,7 +91,7 @@ public class VariableInconsistentIdentifier implements
 			HashMap<String, Integer> map = new HashMap<String, Integer>();
 			prev = start;
 			for (int j = 0; j < nodes.size(); j++) {
-				String token = nodes.get(j).getTokens()[start].getToken();
+				String token = nodes.get(j).getTokens().get(start).getToken();
 				int count = 0;
 				if (map.containsKey(token))
 					count = map.get(token);
@@ -110,8 +110,8 @@ public class VariableInconsistentIdentifier implements
 			HashMap<String, Integer> map = new HashMap<String, Integer>();
 			prev = end;
 			for (int j = 0; j < nodes.size(); j++) {
-				NameToken[] tokens = nodes.get(j).getTokens();
-				String token = tokens[tokens.length - end - 1].getToken();
+				ArrayList<NameToken> tokens = nodes.get(j).getTokens();
+				String token = tokens.get(tokens.size() - end - 1).getToken();
 				int count = 0;
 				if (map.containsKey(token))
 					count = map.get(token);
@@ -130,9 +130,9 @@ public class VariableInconsistentIdentifier implements
 		ArrayList<String> features = new ArrayList<String>();
 		for (IdentifierNode node : nodes) {
 			String nodeS = "";
-			NameToken[] nTokens = node.getTokens();
-			for (int i = start; i < nTokens.length - end; i++)
-				nodeS += nTokens[i].getToken();
+			ArrayList<NameToken> nTokens = node.getTokens();
+			for (int i = start; i < nTokens.size() - end; i++)
+				nodeS += nTokens.get(i).getToken();
 			features.add(nodeS);
 		}
 		return features;

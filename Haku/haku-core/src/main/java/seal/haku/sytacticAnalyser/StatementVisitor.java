@@ -6,12 +6,12 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 
-import seal.haku.lexicalAnalyser.model.RelationAnalyzer;
+import seal.haku.lexicalAnalyser.model.IdentifierNameModel;
 import seal.haku.lexicalAnalyser.tokenizer.CamelCaseSplitter;
 import seal.haku.lexicalAnalyser.tokenizer.POSTagger;
 
 public class StatementVisitor extends ASTVisitor {
-	HashSet<RelationAnalyzer> esList = new HashSet<RelationAnalyzer>();
+	HashSet<IdentifierNameModel> esList = new HashSet<IdentifierNameModel>();
 	ReturnStatement rs;
 
 	public boolean visit(ReturnStatement rs) {
@@ -28,8 +28,8 @@ public class StatementVisitor extends ASTVisitor {
 		String name = es.getExpression().toString();
 		String[] tokens = CamelCaseSplitter.getInstance().executeSingleName(
 				name);
-//		esList.add(new PreprocessNameExecutor(name, POSTagger.getInstance()
-//				.executeSingleName(tokens)));
+		esList.add(new IdentifierNameModel(name, POSTagger.getInstance()
+				.executeSingleName(tokens)));
 		return true;
 	}
 
@@ -37,7 +37,7 @@ public class StatementVisitor extends ASTVisitor {
 		return rs;
 	}
 
-	public HashSet<RelationAnalyzer> getExpressionStatement() {
+	public HashSet<IdentifierNameModel> getExpressionStatement() {
 		return esList;
 	}
 }

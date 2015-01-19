@@ -2,8 +2,8 @@ package seal.haku.sytacticAnalyser.inconsistIdentifier.namingRules;
 
 import java.util.HashSet;
 
-import seal.haku.lexicalAnalyser.model.nameNode.IdentifierNode;
-import seal.haku.lexicalAnalyser.model.types.TokenType;
+import seal.haku.lexicalAnalyser.model.IdentifierNode;
+import seal.haku.lexicalAnalyser.model.TokenType;
 
 public abstract class ImpNamingRule {
 	@SuppressWarnings("serial")

@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import seal.haku.lexicalAnalyser.model.IdentifierNode;
 import seal.haku.lexicalAnalyser.model.TokenPairModel;
-import seal.haku.lexicalAnalyser.model.nameNode.IdentifierNode;
 
 public class MethodNameInconsistentIdentifier implements
 		NamingRecommenderInterface {
@@ -67,7 +67,7 @@ public class MethodNameInconsistentIdentifier implements
 		return idealName;
 	}
 
-	@Override
+
 	public void identifyAbnormal(IdentifierNode cNode) {
 		SimpleNamingPairGenerator pairGenerator = new SimpleNamingPairGenerator();
 		HashMap<TokenPairModel, Integer> namePairs = pairGenerator

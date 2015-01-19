@@ -5,8 +5,8 @@ import java.util.HashSet;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Type;
 
-import seal.haku.lexicalAnalyser.model.nameNode.IdentifierNode;
-import seal.haku.lexicalAnalyser.model.nameNode.NameToken;
+import seal.haku.lexicalAnalyser.model.IdentifierNode;
+import seal.haku.lexicalAnalyser.model.NameToken;
 import seal.haku.lexicalAnalyser.tokenizer.CamelCaseSplitter;
 import seal.haku.lexicalAnalyser.tokenizer.POSTagger;
 
@@ -31,15 +31,9 @@ public class BooleanReturnRule extends ImpNamingRule {
 
 	@Override
 	public boolean meetCriteria(IdentifierNode mNode) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-//	@Override
-//	public boolean meetCriteria(IdentifierNode mNode) {
-////		if (mNode.getNode() instanceof MethodDeclaration) {
-////			MethodDeclaration md = (MethodDeclaration) mNode.getNode();
-////	
+//		if (mNode.getNode() instanceof MethodDeclaration) {
+//			MethodDeclaration md = (MethodDeclaration) mNode.getNode();
+//	
 //			if (md != null && md.getReturnType2() != null
 //					&& md.getReturnType2().toString().equals("boolean")) {
 //				// check method name
@@ -58,7 +52,7 @@ public class BooleanReturnRule extends ImpNamingRule {
 //				}
 //			}
 //		}
-//		return false;
-//	}
+		return false;
+	}
 
 }

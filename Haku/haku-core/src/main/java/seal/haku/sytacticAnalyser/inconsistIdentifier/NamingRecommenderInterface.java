@@ -1,6 +1,6 @@
 package seal.haku.sytacticAnalyser.inconsistIdentifier;
 
-import seal.haku.lexicalAnalyser.model.nameNode.IdentifierNode;
+import seal.haku.lexicalAnalyser.model.IdentifierNode;
 
 public interface NamingRecommenderInterface {
 

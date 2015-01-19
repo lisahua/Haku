@@ -2,9 +2,10 @@ package seal.haku.lexicalAnalyser.tokenizer;
 
 import java.util.ArrayList;
 
-import seal.haku.lexicalAnalyser.model.nameNode.IdentifierNode;
+import seal.haku.lexicalAnalyser.model.IdentifierNode;
+import seal.haku.lexicalAnalyser.model.NameToken;
 
-public class CamelCaseSplitter  {
+public class CamelCaseSplitter implements INameExecutor {
 	private static CamelCaseSplitter splitter = new CamelCaseSplitter();
 
 	public static CamelCaseSplitter getInstance() {
@@ -15,9 +16,9 @@ public class CamelCaseSplitter  {
 
 	}
 
-	public String[] getTokens(IdentifierNode node) {
-		
-		String name = node.getName();
+	public IdentifierNode executeSingleName(IdentifierNode node) {
+		ArrayList<NameToken> token = node.getTokens();
+		String name = token.get(0).getToken().trim();
 		String[] tokens;
 		// if all upper case, split with "_"
 		if (allUpperCase(name)) {
@@ -25,7 +26,12 @@ public class CamelCaseSplitter  {
 		} else {
 			tokens = name.split("(?=[A-Z][^A-Z])|_");
 		}
-		return tokens;
+		for (String s : tokens) {
+			if (!s.equals(""))
+				token.add(new NameToken(s));
+		}
+		token.remove(0);
+		return node;
 	}
 
 	private boolean allUpperCase(String name) {
@@ -45,6 +51,4 @@ public class CamelCaseSplitter  {
 		String[] tokenS = node.split(" |_|\\(|\\)|\\.");
 		return tokenS;
 	}
-
-	
 }

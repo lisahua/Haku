@@ -2,7 +2,7 @@ package seal.haku.sytacticAnalyser.inconsistIdentifier;
 
 import java.util.HashSet;
 
-import seal.haku.lexicalAnalyser.model.nameNode.IdentifierNode;
+import seal.haku.lexicalAnalyser.model.IdentifierNode;
 import seal.haku.sytacticAnalyser.inconsistIdentifier.namingRules.BooleanReturnRule;
 import seal.haku.sytacticAnalyser.inconsistIdentifier.namingRules.ISNamingRule;
 import seal.haku.sytacticAnalyser.inconsistIdentifier.namingRules.ImpNamingRule;
@@ -19,11 +19,11 @@ public class ImplementationInconsistentIdentifier implements
 		}
 	};
 
-	@Override
+	
 	public void identifyAbnormal(IdentifierNode cNode) {
-//		for (IdentifierNode mNode : cNode.getChildren()) {
-//			identifyInconsistentMethod(mNode);
-//		}
+		for (IdentifierNode mNode : cNode.getChildren()) {
+			identifyInconsistentMethod(mNode);
+		}
 	}
 
 	private void identifyInconsistentMethod(IdentifierNode mNode) {

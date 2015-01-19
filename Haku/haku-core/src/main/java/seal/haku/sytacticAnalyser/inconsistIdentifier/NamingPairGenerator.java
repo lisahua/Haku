@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
 
+import seal.haku.lexicalAnalyser.model.IdentifierNode;
+import seal.haku.lexicalAnalyser.model.NameToken;
 import seal.haku.lexicalAnalyser.model.TokenPairModel;
-import seal.haku.lexicalAnalyser.model.nameNode.IdentifierNode;
-import seal.haku.lexicalAnalyser.model.nameNode.NameToken;
 
 public class NamingPairGenerator {
 	private HashMap<TokenPairModel, Integer> namePairModel = new HashMap<TokenPairModel, Integer>();
@@ -31,24 +31,24 @@ public class NamingPairGenerator {
 	private HashMap<TokenPairModel, Integer> extractNamingGroupInSingleClass(
 			IdentifierNode cNode) {
 
-//		ArrayList<IdentifierNode> fNodes = cNode.getChildren2();
-//		int lenF = fNodes.size();
-//		for (int i = 0; i < lenF; i++) {
-//			for (int j = i + 1; j < lenF; j++) {
-//				calFieldDistance(fNodes.get(i).getTokens(), fNodes.get(j)
-//						.getTokens(), fNodes.get(i).getName(), fNodes.get(j)
-//						.getName());
-//			}
-//		}
-//		ArrayList<IdentifierNode> mNodes = cNode.getChildren();
-//		int lenM = mNodes.size();
-//		for (int i = 0; i < lenM; i++) {
-//			for (int j = i + 1; j < lenM; j++) {
-//				calEditDistance(mNodes.get(i).getTokens(), mNodes.get(j)
-//						.getTokens(), mNodes.get(i).getName(), mNodes.get(j)
-//						.getName());
-//			}
-//		}
+		ArrayList<IdentifierNode> fNodes = cNode.getChildren2();
+		int lenF = fNodes.size();
+		for (int i = 0; i < lenF; i++) {
+			for (int j = i + 1; j < lenF; j++) {
+				calFieldDistance(fNodes.get(i).getTokens(), fNodes.get(j)
+						.getTokens(), fNodes.get(i).getName(), fNodes.get(j)
+						.getName());
+			}
+		}
+		ArrayList<IdentifierNode> mNodes = cNode.getChildren();
+		int lenM = mNodes.size();
+		for (int i = 0; i < lenM; i++) {
+			for (int j = i + 1; j < lenM; j++) {
+				calEditDistance(mNodes.get(i).getTokens(), mNodes.get(j)
+						.getTokens(), mNodes.get(i).getName(), mNodes.get(j)
+						.getName());
+			}
+		}
 		return namePairModel;
 	}
 
