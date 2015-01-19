@@ -7,7 +7,6 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
@@ -16,7 +15,6 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
  * @Date: Jan 18, 2015
  */
 public class ApproximatePurityMethodVisitor extends ASTVisitor {
-	private String output;
 	private HashMap<String, String> fieldTypeMap = new HashMap<String, String>();
 	private HashMap<String, String> variableTypeMap = new HashMap<String, String>();
 	private HashSet<String> bugReason = new HashSet<String>();
@@ -61,13 +59,18 @@ public class ApproximatePurityMethodVisitor extends ASTVisitor {
 			String invokeS = ((MethodInvocation) exp).toString();
 			int docIndex = invokeS.indexOf('.');
 			if (docIndex > 0) {
-				char start = ((MethodInvocation) exp).getExpression()
-						.toString().charAt(0);
-				if (start > 'Z')
+				// has invoker
+				Expression expression = ((MethodInvocation) exp)
+						.getExpression();
+				if (expression == null)
+					return "";
+
+				if (expression.toString().charAt(0) > 'Z')
 					return ",2,"
 							+ isSuspicious(((MethodInvocation) exp)
-									.getExpression()) +"."
+									.getExpression()) + "."
 							+ ((MethodInvocation) exp).getName().toString();
+				else return ",2," + invokeS;
 			} else
 				return ",2," + invokeS;
 		}

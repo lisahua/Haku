@@ -2,7 +2,6 @@ package seal.haku.lexicalAnalyser.similarity;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
@@ -52,24 +51,6 @@ public class ApproximatePurityClassVisitor extends ASTVisitor {
 
 		return true;
 	}
-
-	public boolean isSuspiciousMethod(MethodDeclaration decleration) {
-		// for (String field : fieldList) {
-		// if (decleration.toString().contains(field + " ")) {
-		// return true;
-		// }
-		// }
-		return false;
-	}
-
-	// private String processFieldName(FieldDeclaration fd) {
-	// @SuppressWarnings("rawtypes")
-	// List fragment = fd.fragments();
-	// String fString = "";
-	// for (Object o : fragment)
-	// fString += o.toString().split("=")[0] ;
-	// return fString.trim();
-	// }
 
 	private String processMethodName(MethodDeclaration md) {
 		return md.getName().getIdentifier();

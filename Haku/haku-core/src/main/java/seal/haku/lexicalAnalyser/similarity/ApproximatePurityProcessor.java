@@ -1,8 +1,11 @@
 package seal.haku.lexicalAnalyser.similarity;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jdt.core.dom.AST;
@@ -16,6 +19,18 @@ import seal.haku.lexicalAnalyser.model.IdentifierNode;
  * @Date: Jan 17, 2015
  */
 public class ApproximatePurityProcessor {
+	PrintWriter writer;
+
+	public ApproximatePurityProcessor() {
+	}
+
+	public ApproximatePurityProcessor(String outputPath) {
+		try {
+			writer = new PrintWriter(outputPath);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void getNameInDir(String dirPath) {
 		File folder = new File(dirPath);
@@ -41,10 +56,17 @@ public class ApproximatePurityProcessor {
 			final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 			ApproximatePurityClassProcessor classProcessor = new ApproximatePurityClassProcessor();
 			cu.accept(classProcessor);
+			saveBugs(classProcessor.getBugs(),file.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return nodeSet;
+	}
 
+	public void saveBugs(HashSet<String> bugs,String filePath) {
+		if (bugs==null || bugs.size()==0) return;
+		writer.println(filePath);
+		for (String bug : bugs)
+			writer.println(bug);
 	}
 }

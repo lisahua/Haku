@@ -1,5 +1,7 @@
 package seal.haku.lexicalAnalyser.similarity;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.HashSet;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -10,21 +12,16 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
  * @Date: Jan 18, 2015
  */
 public class ApproximatePurityClassProcessor extends ASTVisitor {
-
-	HashSet<String> methodList = new HashSet<String>();
-	HashSet<String> fieldList = new HashSet<String>();
+	HashSet<String> bugs = new HashSet<String>();
 
 	public boolean visit(TypeDeclaration declaration) {
 		ApproximatePurityClassVisitor cVisitor = new ApproximatePurityClassVisitor();
 		declaration.accept(cVisitor);
-		HashSet<String> bugs = cVisitor.getBugs();
-		System.out.println(declaration.getName().toString());
-		if (bugs.size()==0) return true;
-		
-		for (String bug: bugs) {
-			System.out.println(" "+bug);
-		}
+		bugs.addAll(cVisitor.getBugs());
 		return true;
 	}
 
+	public HashSet<String> getBugs() {
+		return bugs;
+	}
 }
