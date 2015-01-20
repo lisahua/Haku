@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jdt.core.dom.AST;
@@ -63,7 +62,7 @@ public class UsagePatternProcessor {
 		return nodeSet;
 	}
 
-	public void saveBugs(HashSet<String> bugs,String filePath) {
+	public void saveBugs(ArrayList<String> bugs,String filePath) {
 		if (bugs==null || bugs.size()==0) return;
 		writer.println(filePath);
 		for (String bug : bugs)

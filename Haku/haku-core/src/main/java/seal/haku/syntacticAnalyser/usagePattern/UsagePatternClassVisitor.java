@@ -2,6 +2,7 @@ package seal.haku.syntacticAnalyser.usagePattern;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
@@ -27,8 +28,7 @@ public class UsagePatternClassVisitor extends ASTVisitor {
 		if (methodName.charAt(0) - 'A' >= 0 && methodName.charAt(0) - 'Z' <= 0)
 			return true;
 		else {
-			UsagePatternMethodVisitor methodVisitor = new UsagePatternMethodVisitor(
-					fieldMap);
+			UsagePatternMethodVisitor methodVisitor = new UsagePatternMethodVisitor();
 			md.accept(methodVisitor);
 			String bugs = methodVisitor.getUsagePattern();
 			if (bugs.trim().length() > 0)
@@ -50,6 +50,13 @@ public class UsagePatternClassVisitor extends ASTVisitor {
 		fieldMap.put(vString.trim(), tString.trim());
 
 		return true;
+	}
+
+	public String getFieldMapString() {
+		String fieldDic = "";
+		for (Map.Entry<String, String> entry: fieldMap.entrySet())
+			fieldDic += entry.getKey()+":"+entry.getValue()+",";
+		return fieldDic;
 	}
 
 	private String processMethodName(MethodDeclaration md) {

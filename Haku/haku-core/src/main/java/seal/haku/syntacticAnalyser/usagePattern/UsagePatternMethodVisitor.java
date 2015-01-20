@@ -3,12 +3,13 @@ package seal.haku.syntacticAnalyser.usagePattern;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 /**
@@ -16,15 +17,10 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
  * @Date: Jan 18, 2015
  */
 public class UsagePatternMethodVisitor extends ASTVisitor {
-	private HashMap<String, String> fieldTypeMap = new HashMap<String, String>();
 	private HashMap<String, String> variableTypeMap = new HashMap<String, String>();
 	private HashSet<String> usagePattern = new HashSet<String>();
 
 	public UsagePatternMethodVisitor() {
-	}
-
-	public UsagePatternMethodVisitor(HashMap<String, String> fieldMap) {
-		this.fieldTypeMap = fieldMap;
 	}
 
 	public boolean visit(ExpressionStatement es) {
@@ -94,8 +90,8 @@ public class UsagePatternMethodVisitor extends ASTVisitor {
 					+ fa.getName().toString();
 		} else if (exp instanceof QualifiedName) {
 			QualifiedName qa = (QualifiedName) exp;
-			return extractUsagePattern(qa.getName()) + "."
-					+ extractUsagePattern(qa.getQualifier());
+			return extractUsagePattern(qa.getQualifier()) + "."
+					+ extractUsagePattern(qa.getName());
 		} else if (exp instanceof Assignment) {
 			String leftside = extractUsagePattern(((Assignment) exp)
 					.getLeftHandSide());
@@ -119,7 +115,7 @@ public class UsagePatternMethodVisitor extends ASTVisitor {
 		// if (fieldTypeMap.containsKey(value))
 		// return value;
 		if (variableTypeMap.containsKey(value))
-			return variableTypeMap.get(value);
+			return variableTypeMap.get(value)+"["+value+"]";
 		return value;
 	}
 	/*
