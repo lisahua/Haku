@@ -1,4 +1,4 @@
-package seal.haku.lexicalAnalyser.similarity;
+package seal.haku.syntacticAnalyser.usagePattern;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,13 +18,13 @@ import seal.haku.lexicalAnalyser.model.IdentifierNode;
  * @Author Lisa
  * @Date: Jan 17, 2015
  */
-public class ApproximatePurityProcessor {
+public class UsagePatternProcessor {
 	PrintWriter writer;
 
-	public ApproximatePurityProcessor() {
+	public UsagePatternProcessor() {
 	}
 
-	public ApproximatePurityProcessor(String outputPath) {
+	public UsagePatternProcessor(String outputPath) {
 		try {
 			writer = new PrintWriter(outputPath);
 		} catch (FileNotFoundException e) {
@@ -54,9 +54,9 @@ public class ApproximatePurityProcessor {
 			parser.setSource(fileString.toCharArray());
 			parser.setKind(ASTParser.K_COMPILATION_UNIT);
 			final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-			ApproximatePurityClassProcessor classProcessor = new ApproximatePurityClassProcessor();
+			UsagePatternClassProcessor classProcessor = new UsagePatternClassProcessor();
 			cu.accept(classProcessor);
-			saveBugs(classProcessor.getBugs(),file.getAbsolutePath());
+			saveBugs(classProcessor.getUsagePatterns(),file.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

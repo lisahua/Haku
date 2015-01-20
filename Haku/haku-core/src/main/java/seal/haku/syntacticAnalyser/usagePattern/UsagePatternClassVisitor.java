@@ -1,4 +1,4 @@
-package seal.haku.lexicalAnalyser.similarity;
+package seal.haku.syntacticAnalyser.usagePattern;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,7 +16,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
  *        of memory space when loading POS tagger, we separate syntactic
  *        analysis and lexical analysis.
  */
-public class ApproximatePurityClassVisitor extends ASTVisitor {
+public class UsagePatternClassVisitor extends ASTVisitor {
 
 	HashSet<String> methodList = new HashSet<String>();
 	HashMap<String, String> fieldMap = new HashMap<String, String>();
@@ -27,10 +27,10 @@ public class ApproximatePurityClassVisitor extends ASTVisitor {
 		if (methodName.charAt(0) - 'A' >= 0 && methodName.charAt(0) - 'Z' <= 0)
 			return true;
 		else {
-			ApproximatePurityMethodVisitor methodVisitor = new ApproximatePurityMethodVisitor(
+			UsagePatternMethodVisitor methodVisitor = new UsagePatternMethodVisitor(
 					fieldMap);
 			md.accept(methodVisitor);
-			String bugs = methodVisitor.getBug();
+			String bugs = methodVisitor.getUsagePattern();
 			if (bugs.trim().length() > 0)
 				methodList.add(methodName + "-->" + bugs);
 		}
