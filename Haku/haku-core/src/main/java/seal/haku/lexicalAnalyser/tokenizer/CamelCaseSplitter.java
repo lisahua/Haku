@@ -44,7 +44,7 @@ public class CamelCaseSplitter implements INameExecutor {
 	}
 
 	public String[] executeSingleName(String node) {
-		String[] tokenS = node.split("(?=[A-Z][^A-Z])|_|\\(|\\)|\\.");
+		String[] tokenS = node.trim().split("(?=[A-Z][^A-Z])|_|\\(|\\)|\\.");
 		return tokenS;
 	}
 	public String[] splitStatement(String node) {

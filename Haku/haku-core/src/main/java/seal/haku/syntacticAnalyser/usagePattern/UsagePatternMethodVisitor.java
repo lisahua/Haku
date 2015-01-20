@@ -18,6 +18,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
  */
 public class UsagePatternMethodVisitor extends ASTVisitor {
 	private HashMap<String, String> variableTypeMap = new HashMap<String, String>();
+	// FIXME regardless of temporal order for usage pattern now
 	private HashSet<String> usagePattern = new HashSet<String>();
 
 	public UsagePatternMethodVisitor() {
@@ -45,9 +46,13 @@ public class UsagePatternMethodVisitor extends ASTVisitor {
 		String tString = vd.getType().toString();
 
 		for (Object o : vd.fragments()) {
-			vString += o.toString().split("=")[0];
+			vString += o.toString().split("=")[0]+",";
 		}
-		variableTypeMap.put(vString.trim(), tString.trim());
+		
+		String[] values = vString.split(",");
+		for (String value : values)
+			variableTypeMap.put(value.trim(), tString.trim());
+		variableTypeMap.remove("");
 		return true;
 	}
 
@@ -78,12 +83,12 @@ public class UsagePatternMethodVisitor extends ASTVisitor {
 						.getExpression();
 				if (expression == null)
 					return "";
-				return ",2,"
+				return ",2:"
 						+ extractUsagePattern(((MethodInvocation) exp)
 								.getExpression()) + "."
 						+ ((MethodInvocation) exp).getName().toString();
 			} else
-				return ",2," + invokeS;
+				return ",2:" + invokeS;
 		} else if (exp instanceof FieldAccess) {
 			FieldAccess fa = (FieldAccess) exp;
 			return extractUsagePattern(fa.getExpression())
@@ -96,7 +101,7 @@ public class UsagePatternMethodVisitor extends ASTVisitor {
 			String leftside = extractUsagePattern(((Assignment) exp)
 					.getLeftHandSide());
 			// if (leftside.length() > 0 && leftside.charAt(0) > 'Z')
-			return ",1," + leftside;
+			return ",1:" + leftside;
 			// else
 			// return leftside;
 		} else {
@@ -115,7 +120,7 @@ public class UsagePatternMethodVisitor extends ASTVisitor {
 		// if (fieldTypeMap.containsKey(value))
 		// return value;
 		if (variableTypeMap.containsKey(value))
-			return variableTypeMap.get(value)+"["+value+"]";
+			return variableTypeMap.get(value) + "[" + value + "]";
 		return value;
 	}
 	/*

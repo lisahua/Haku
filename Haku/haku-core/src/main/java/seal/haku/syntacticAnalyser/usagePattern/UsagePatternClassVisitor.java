@@ -31,8 +31,8 @@ public class UsagePatternClassVisitor extends ASTVisitor {
 			UsagePatternMethodVisitor methodVisitor = new UsagePatternMethodVisitor();
 			md.accept(methodVisitor);
 			String bugs = methodVisitor.getUsagePattern();
-			if (bugs.trim().length() > 0)
-				methodList.add(methodName + "-->" + bugs);
+			// if (bugs.trim().length() > 0)
+			methodList.add(methodName + "-->" + bugs.trim());
 		}
 		return true;
 	}
@@ -54,8 +54,8 @@ public class UsagePatternClassVisitor extends ASTVisitor {
 
 	public String getFieldMapString() {
 		String fieldDic = "";
-		for (Map.Entry<String, String> entry: fieldMap.entrySet())
-			fieldDic += entry.getKey()+":"+entry.getValue()+",";
+		for (Map.Entry<String, String> entry : fieldMap.entrySet())
+			fieldDic += entry.getKey() + ":" + entry.getValue() + ",";
 		return fieldDic;
 	}
 

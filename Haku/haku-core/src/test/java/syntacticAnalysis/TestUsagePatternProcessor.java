@@ -4,7 +4,7 @@ import org.testng.annotations.Test;
 
 import seal.haku.syntacticAnalyser.usagePattern.UsagePatternProcessor;
 
-public class TestApproximatePurityAnalysis {
+public class TestUsagePatternProcessor {
 	@Test
 	public void testVisitor() {
 		UsagePatternProcessor processor = new UsagePatternProcessor("src/test/resources/seal/haku/output/lexicalAnalysis/elasticsearch-1.0.0-bug.txt");
