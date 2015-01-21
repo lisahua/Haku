@@ -56,6 +56,11 @@ public class ConfigUtility {
 			"term", "address", "context", "target", "removed", "local",
 			"modules", "group", "first", "smart", "timeout", "river" };
 
+	public static final double UP_CLUSTER_INCONSISTENT_THRESHOLD = 0.3;
+	public static final int UP_SIMILAR_THRESHOLD = 2;// unable to change based
+														// on implementation now.
+	public static final int UP_INCONSISTENT_CLUSTER = 3;
+
 	public static Set<String> getPURITY_VERBS() {
 		if (PURITY_VERBS.size() == 0)
 			PURITY_VERBS.addAll(Arrays.asList(purityVerbs));

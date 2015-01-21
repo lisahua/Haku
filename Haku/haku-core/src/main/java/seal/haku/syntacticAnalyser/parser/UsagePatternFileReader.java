@@ -21,6 +21,7 @@ public abstract class UsagePatternFileReader {
 	protected boolean notifyFileChange = true;
 	protected CamelCaseSplitter splitter = CamelCaseSplitter.getInstance();
 
+	
 	public void readUsagePatternFile(String file) {
 
 		try {
