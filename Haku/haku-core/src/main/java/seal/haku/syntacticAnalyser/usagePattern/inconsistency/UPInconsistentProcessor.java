@@ -1,9 +1,12 @@
 package seal.haku.syntacticAnalyser.usagePattern.inconsistency;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.TreeSet;
 
 import seal.haku.syntacticAnalyser.parser.UsagePatternFileReader;
 
@@ -13,17 +16,18 @@ import seal.haku.syntacticAnalyser.parser.UsagePatternFileReader;
  */
 public class UPInconsistentProcessor extends UsagePatternFileReader {
 	PrintWriter writer;
-
+private String outputFile ;
 	public UPInconsistentProcessor(String outputPath) {
 		try {
-			writer = new PrintWriter(outputPath);
+			writer = new PrintWriter(outputPath+".tmp");
+			outputFile = outputPath;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void processMethod(String usagePattern) {
+	public void processLine(String usagePattern) {
 		String[] nameUsage = usagePattern.split("-->");
 		if (nameUsage.length > 1) {
 			HashSet<String> usageSet = new HashSet<String>(
@@ -71,6 +75,28 @@ public class UPInconsistentProcessor extends UsagePatternFileReader {
 			return type + usage.substring(dotIndex) + "," + name;
 		} else {
 			return processingClass + "." + usage + ",";
+		}
+
+	}
+	
+	public void sortUsagePattern() {
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(outputFile
+					+ ".tmp"));
+			TreeSet<String> lines = new TreeSet<String>();
+			String line = "";
+			while ((line = reader.readLine()) != null) {
+				if (line.charAt(0) >= 'A' && line.charAt(0) <= 'z')
+					lines.add(line);
+			}
+			writer.close();
+			writer = new PrintWriter(outputFile);
+			for (String l : lines)
+				writer.println(l);
+			reader.close();
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}

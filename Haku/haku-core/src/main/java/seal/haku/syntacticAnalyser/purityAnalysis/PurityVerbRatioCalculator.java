@@ -3,7 +3,7 @@ package seal.haku.syntacticAnalyser.purityAnalysis;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Set;
 
 import seal.haku.empirical.compare.ConfigUtility;
 import seal.haku.syntacticAnalyser.parser.UsagePatternFileReader;
@@ -17,7 +17,7 @@ public class PurityVerbRatioCalculator extends UsagePatternFileReader {
 	private HashMap<String, Integer> impureVerbMap = new HashMap<String, Integer>();
 
 	@Override
-	public void processMethod(String usagePattern) {
+	public void processLine(String usagePattern) {
 		String verb = getVerbFromUsagePattern(usagePattern);
 		if (!isPureMethod(usagePattern))
 			addToImpureMap(verb);
@@ -25,7 +25,7 @@ public class PurityVerbRatioCalculator extends UsagePatternFileReader {
 			addToPureMap(verb);
 	}
 
-	public void calculateRatio() {
+	public HashMap<String,Double> calculateRatio() {
 		pureVerbMap.remove("");
 		impureVerbMap.remove("");
 		HashMap<String, Double> verbRatioMap = new HashMap<String, Double>();
@@ -38,17 +38,16 @@ public class PurityVerbRatioCalculator extends UsagePatternFileReader {
 				verbRatioMap.put(verb, ratio);
 		}
 		System.out.println("number of verbs: " + verbRatioMap.size());
+		return verbRatioMap;
 		// StringBuilder pureVerbs = new StringBuilder();
 		// ConfigUtility.setPURITY_VERBS(verbRatioMap.keySet());
-
-		TreeMap<String, Double> sortedMap = new TreeMap<String, Double>(
-				new ValueComparator(verbRatioMap));
-		sortedMap.putAll(verbRatioMap);
-		for (Map.Entry<String, Double> entry : sortedMap.entrySet()) {
-			System.out.println(entry.getKey() + ", " + entry.getValue() + ","
-					+ pureVerbMap.get(entry.getKey()));
-		}
-
+		/*
+		 * TreeMap<String, Double> sortedMap = new TreeMap<String, Double>( new
+		 * ValueComparator(verbRatioMap)); sortedMap.putAll(verbRatioMap); for
+		 * (Map.Entry<String, Double> entry : sortedMap.entrySet()) {
+		 * System.out.println(entry.getKey() + ", " + entry.getValue() + "," +
+		 * pureVerbMap.get(entry.getKey())); }
+		 */
 		// System.out.println("get: " + pureVerbMap.get("get") * 1.0
 		// / (pureVerbMap.get("get") + impureVerbMap.get("get")) + ","
 		// + pureVerbMap.get("get"));

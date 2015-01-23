@@ -2,7 +2,10 @@ package seal.haku.syntacticAnalyser.purityAnalysis;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import seal.haku.empirical.compare.ConfigUtility;
 import seal.haku.syntacticAnalyser.parser.UsagePatternFileReader;
@@ -13,6 +16,7 @@ import seal.haku.syntacticAnalyser.parser.UsagePatternFileReader;
  */
 public class PurityAnalysisProcessor extends UsagePatternFileReader {
 	private Set<String> pureVerbs;
+	private HashMap<String, Double> verbRatioMap;
 
 	public PurityAnalysisProcessor(String bugOutputPath) {
 		pureVerbs = ConfigUtility.getPURITY_VERBS();
@@ -24,11 +28,33 @@ public class PurityAnalysisProcessor extends UsagePatternFileReader {
 		}
 	}
 
+	public PurityAnalysisProcessor(String bugOutputPath,
+			HashMap<String, Double> pureVerbMap) {
+		try {
+			writer = new PrintWriter(bugOutputPath);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		verbRatioMap = pureVerbMap;
+		this.pureVerbs = pureVerbMap.keySet();
+	}
+
 	@Override
-	public void processMethod(String usagePattern) {
+	public void processLine(String usagePattern) {
 		if (!isPureMethod(usagePattern))
 			if (pureVerbs.contains(getVerbFromUsagePattern(usagePattern))) {
 				writer.println(usagePattern);
 			}
+	}
+
+	public void printPureVerbs() {
+
+		TreeMap<String, Double> sortedMap = new TreeMap<String, Double>(
+				new ValueComparator(verbRatioMap));
+		sortedMap.putAll(verbRatioMap);
+		for (Map.Entry<String, Double> entry : sortedMap.entrySet()) {
+			System.out.println(entry.getKey() + ", " + entry.getValue());
+		}
+
 	}
 }

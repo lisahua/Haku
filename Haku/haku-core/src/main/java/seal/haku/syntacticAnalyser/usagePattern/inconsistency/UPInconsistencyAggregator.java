@@ -7,13 +7,13 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import seal.haku.syntacticAnalyser.parser.UsagePatternFileReader;
+import seal.haku.syntacticAnalyser.parser.CustomizedFileReader;
 
 /**
  * @Author Lisa
  * @Date: Jan 20, 2015
  */
-public class UPInconsistencyAggregator extends UsagePatternFileReader {
+public class UPInconsistencyAggregator extends CustomizedFileReader {
 	String processingAPI;
 	HashMap<String, Integer> nameMap = new HashMap<String, Integer>();
 	HashMap<String, Integer> mtdMap = new HashMap<String, Integer>();
@@ -28,13 +28,13 @@ public class UPInconsistencyAggregator extends UsagePatternFileReader {
 		}
 	}
 
-	public void readUsagePatternFile(String file) {
+	public void readFile(String file) {
 		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(file));
 			String line = "";
 			while ((line = reader.readLine()) != null) {
-				processMethod(line);
+				processLine(line);
 			}
 			reader.close();
 			nameWriter.close();
@@ -45,7 +45,7 @@ public class UPInconsistencyAggregator extends UsagePatternFileReader {
 	}
 
 	@Override
-	public void processMethod(String usagePattern) {
+	public void processLine(String usagePattern) {
 		String[] tokens = usagePattern.split(",");
 		if (processingAPI == null) {
 			processingAPI = tokens[0].trim();
@@ -64,6 +64,8 @@ public class UPInconsistencyAggregator extends UsagePatternFileReader {
 	}
 
 	private void addNameToMap(String[] tokens) {
+		if (tokens.length<3)
+			return;
 		String name = tokens[1].trim();
 		String method = tokens[2].trim();
 		if (!name.equals("")) {
@@ -90,11 +92,5 @@ public class UPInconsistencyAggregator extends UsagePatternFileReader {
 			methodWriter.println(processingAPI + "," + methods);
 		}
 	}
-	private String getAnomaly(int whichMap) {
-		
-		//TODO get anomaly
-		HashMap<String,Integer> map = (whichMap==1)? nameMap:mtdMap;
-		
-		return "";
-	}
+	
 }

@@ -13,7 +13,7 @@ import seal.haku.lexicalAnalyser.tokenizer.CamelCaseSplitter;
  * @Author Lisa
  * @Date: Jan 19, 2015
  */
-public abstract class UsagePatternFileReader {
+public abstract class UsagePatternFileReader extends CustomizedFileReader {
 	protected HashMap<String, String> fieldTypeMap = new HashMap<String, String>();
 	protected String processingClass = "";
 	protected String filePath = "";
@@ -21,8 +21,7 @@ public abstract class UsagePatternFileReader {
 	protected boolean notifyFileChange = true;
 	protected CamelCaseSplitter splitter = CamelCaseSplitter.getInstance();
 
-	
-	public void readUsagePatternFile(String file) {
+	public void readFile(String file) {
 
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -42,17 +41,18 @@ public abstract class UsagePatternFileReader {
 
 					continue;
 				} else {
-					processMethod(line);
+					processLine(line);
 				}
 			}
 			reader.close();
+			if (writer != null)
+				writer.flush();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public abstract void processMethod(String usagePattern);
+	public abstract void processLine(String usagePattern);
 
 	public void fileChange(String file) {
 		if (notifyFileChange && writer != null)
@@ -87,4 +87,5 @@ public abstract class UsagePatternFileReader {
 	protected String getVerbFromMtdName(String mtdName) {
 		return splitter.executeSingleName(mtdName)[0].trim();
 	}
+	
 }

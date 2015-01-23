@@ -1,5 +1,8 @@
 package lexicalAnalyser;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
 import org.testng.annotations.Test;
 
 import seal.haku.lexicalAnalyser.processing.NameProcessingDecorator;
@@ -7,7 +10,7 @@ import seal.haku.lexicalAnalyser.processing.SimpleNamePrinter;
 
 public class TestLexicalProcessing {
 
-	 @Test
+	//@Test
 	public void printNodes() {
 		SimpleNamePrinter printer = new SimpleNamePrinter(
 				"src/test/resources/seal/haku/output/lexicalAnalysis/elasticsearch-1.0.0.txt");
@@ -18,7 +21,7 @@ public class TestLexicalProcessing {
 	// public void testSoot() {
 	// Pack jtp = PackManager.v().getPack("jtp");
 	// }
-	//@Test
+	// @Test
 	public void printProcessedNodes() {
 		NameProcessingDecorator processor = new NameProcessingDecorator();
 		processor

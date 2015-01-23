@@ -8,13 +8,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import seal.haku.empirical.compare.ConfigUtility;
-import seal.haku.syntacticAnalyser.parser.UsagePatternFileReader;
+import seal.haku.syntacticAnalyser.parser.CustomizedFileReader;
 
 /**
  * @Author Lisa
  * @Date: Jan 20, 2015
  */
-public class UPInconsistencyCluster extends UsagePatternFileReader {
+public class UPInconsistencyCluster extends CustomizedFileReader {
 	// @SuppressWarnings("unchecked")
 	// private HashSet<String>[] clusters = new
 	// HashSet[ConfigUtility.UP_INCONSISTENT_CLUSTER];
@@ -30,22 +30,22 @@ public class UPInconsistencyCluster extends UsagePatternFileReader {
 	}
 
 	@Override
-	public void processMethod(String namePattern) {
+	public void processLine(String namePattern) {
 		initCluster(namePattern);
 
 		HashSet<String> anomaly = clusterNumber();
 		if (anomaly != null)
 			for (String name : anomaly)
-				System.out.println(name + "--" + namePattern);
+				writer.println(name + "--" + namePattern);
 	}
 
-	public void readUsagePatternFile(String file) {
+	public void readFile(String file) {
 		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(file));
 			String line = "";
 			while ((line = reader.readLine()) != null) {
-				processMethod(line);
+				processLine(line);
 			}
 			reader.close();
 			writer.close();
@@ -126,17 +126,18 @@ public class UPInconsistencyCluster extends UsagePatternFileReader {
 		}
 		int sum = 0;
 		HashSet<String> anomalyName = new HashSet<String>();
-		int clusterSum=0;
+		int clusterSum = 0;
 		for (int num : clusterNum.values())
 			sum += num;
-		clusterSum=sum;
+		clusterSum = sum;
 		int countAnomalyCandidate = 0;
 		for (int i = 0; i < nameSize; i++)
 			if (clusterTable[i] == 0) {
 				sum += nameNumber.get(names[i]);
 				countAnomalyCandidate++;
 			}
-		if (countAnomalyCandidate > ConfigUtility.UP_INCONSISTENT_CLUSTER || (clusterSum *1.0)/sum < 1- ConfigUtility.UP_CLUSTER_INCONSISTENT_THRESHOLD)
+		if (countAnomalyCandidate > ConfigUtility.UP_INCONSISTENT_CLUSTER
+				|| (clusterSum * 1.0) / sum < 1 - ConfigUtility.UP_CLUSTER_INCONSISTENT_THRESHOLD)
 			return null;
 		for (int i = 0; i < nameSize; i++) {
 			if (clusterTable[i] != 0)
@@ -165,7 +166,7 @@ public class UPInconsistencyCluster extends UsagePatternFileReader {
 	}
 
 	private boolean similarToType(String name) {
-		String isSimiar = isSimiliar(name, processingAPI.split("\\.")[0]);
+		String isSimiar = isSimiliar(name, processingAPI);
 		if (isSimiar.length() > 1)
 			return true;
 		return false;
